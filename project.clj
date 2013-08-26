@@ -12,8 +12,10 @@
   :profiles
   {:dev
    {:source-paths      ["src/clojure"]
-    :java-source-paths ["src/java"]
-    }
+    :java-source-paths ["src/java"]}
+   :release
+   {:source-paths      ["src/clojure"]
+    :java-source-paths ["src/java"]}
    :integration
    {:source-paths      ["src/clojure"]
     :java-source-paths ["src/java"]
