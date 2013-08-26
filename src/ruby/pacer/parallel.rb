@@ -11,13 +11,17 @@ module Pacer
     module RouteOperations
       def parallel(opts = {}, &block)
         threads = opts.fetch(:threads, 2)
-        branched = (0..threads).reduce(channel_cap buffer: opts.fetch(:in_buffer, threads)) do |r, n|
-          r.branch do |x|
-            b = block.call x.channel_reader(based_on: self)
-            b.channel_cap buffer: opts[:out_buffer]
+        if threads > 0
+          branched = (0...threads).reduce(channel_cap buffer: opts.fetch(:in_buffer, threads)) do |r, n|
+            r.branch do |x|
+              b = block.call x.channel_reader(based_on: self)
+              b.channel_cap buffer: opts[:out_buffer]
+            end
           end
+          branched.merge_exhaustive.gather.channel_fan_in(based_on: block.call(self))
+        else
+          block.call self
         end
-        branched.merge_exhaustive.gather.channel_fan_in(based_on: block.call(self))
       end
     end
   end
