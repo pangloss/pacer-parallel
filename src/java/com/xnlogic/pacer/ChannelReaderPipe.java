@@ -9,7 +9,7 @@ import clojure.lang.RT;
 import clojure.lang.Var;
 
 public class ChannelReaderPipe<S> extends AbstractPipe<S, Object> implements TransformPipe<S, Object> {
-  private static final Var READ_CHAN = RT.var("core.async", "<!!");
+  private static final Var READ_CHAN = RT.var("clojure.core.async", "<!!");
 
   private Object chan;
 

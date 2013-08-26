@@ -3,7 +3,7 @@ module Pacer
     module RouteOperations
       # The source of this in a pipe emitting individual channels
       def channel_reader(opts = {})
-        chain_route(opts.merge transform: Pacer::Transform::ChannelReader)
+        chain_route(opts.merge transform: Pacer::Parallel::ChannelReader)
       end
     end
   end

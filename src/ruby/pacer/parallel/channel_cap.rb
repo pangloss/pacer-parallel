@@ -4,7 +4,7 @@ module Pacer
       # This creates a channel, emits it and spawns a thread
       # that will push all data in the source into the channel.
       def channel_cap(opts = {})
-        chain_route(opts.merge transform: Pacer::Transform::ChannelCap, element_type: :channel)
+        chain_route(opts.merge transform: Pacer::Parallel::ChannelCap, element_type: :channel)
       end
     end
   end

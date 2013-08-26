@@ -1,12 +1,15 @@
 (ns pacer.parallel
-  (:require [core.async :refer [chan >!!]])
+  (:require [clojure.core.async :refer [chan >!! close!]])
   (:import com.tinkerpop.pipes.Pipe))
 
 (defn pipe->chan [^Pipe pipe buffer]
   (let [c (if buffer (chan buffer) (chan))]
-    (when (.hasNext pipe)
+    (if (.hasNext pipe)
       (future
         (loop [v (.next pipe)]
           (when v (>!! c v))
-          (when (.hasNext pipe) (recur (.next pipe))))))
+          (if (.hasNext pipe)
+            (recur (.next pipe))
+            (close! c))))
+      (close! c))
     c))

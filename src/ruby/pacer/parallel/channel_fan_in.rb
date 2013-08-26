@@ -3,7 +3,7 @@ module Pacer
     module RouteOperations
       # The source of this should be a pipe emitting lists of channels.
       def channel_fan_in(opts = {})
-        chain_route(opts.merge transform: Pacer::Transform::ChannelFanIn)
+        chain_route(opts.merge transform: Pacer::Parallel::ChannelFanIn)
       end
     end
   end
@@ -12,12 +12,10 @@ module Pacer
     module ChannelFanIn
       import com.xnlogic.pacer.ChannelFanInPipe
 
-      attr_accessor :buffer
-
       protected
 
       def attach_pipe(end_pipe)
-        pipe = ChannelFanInPipe.new(buffer)
+        pipe = ChannelFanInPipe.new
         pipe.setStarts end_pipe if end_pipe
         pipe
       end
