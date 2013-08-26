@@ -2,6 +2,7 @@ package com.xnlogic.pacer;
 
 import com.tinkerpop.pipes.AbstractPipe;
 import com.tinkerpop.pipes.Pipe;
+import com.tinkerpop.pipes.transform.TransformPipe;
 import com.tinkerpop.pipes.util.FastNoSuchElementException;
 
 import clojure.lang.RT;
@@ -13,9 +14,9 @@ public class ChannelReaderPipe<S> extends AbstractPipe<S, Object> implements Tra
   private Object chan;
 
   protected Object processNextStart() {
-    while true {
-      if (!this.chan) {
-        this.chan = starts.next()
+    while (true) {
+      if (this.chan == null) {
+        this.chan = starts.next();
       } else {
         Object value = READ_CHAN.invoke(this.chan);
         if (value == null)

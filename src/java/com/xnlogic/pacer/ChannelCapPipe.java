@@ -2,6 +2,7 @@ package com.xnlogic.pacer;
 
 import com.tinkerpop.pipes.AbstractPipe;
 import com.tinkerpop.pipes.Pipe;
+import com.tinkerpop.pipes.transform.TransformPipe;
 import com.tinkerpop.pipes.util.FastNoSuchElementException;
 
 import clojure.lang.RT;
