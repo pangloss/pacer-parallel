@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ```ruby
   g.v.parallel(threads: 8, in_buffer: 4, out_buffer: 10) do |v|
-    v.out.out.out.out.out
+    v.all(&:out)
   end
 ```
 

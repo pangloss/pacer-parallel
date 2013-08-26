@@ -1,4 +1,5 @@
 require "pacer/parallel/version"
+require "pacer/clojure"
 require 'pacer'
 require "pacer/parallel/channel_cap"
 require "pacer/parallel/channel_reader"
@@ -21,3 +22,6 @@ module Pacer
     end
   end
 end
+
+Pacer::Clojure.require 'clojure.core'
+Pacer::Clojure.require 'pacer.parallel'
