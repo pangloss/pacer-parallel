@@ -14,7 +14,8 @@
     :java-source-paths ["src/java"]}
    :release
    {:source-paths      ["src/clojure"]
-    :java-source-paths ["src/java"]}
+    :java-source-paths ["src/java"]
+    :target-path       "target/release"}
    :integration
    {:source-paths      ["src/clojure"]
     :java-source-paths ["src/java"]

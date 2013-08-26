@@ -4,11 +4,11 @@ task :package do
   system 'lein', 'with-profile', 'release', 'uberjar'
 end
 
-file Pacer::McFly::JAR_PATH => FileList['project.clj', 'src/clojure/**/*.clj', 'src/java/**/*.java'] do
+file Pacer::Parallel::JAR_PATH => FileList['project.clj', 'src/clojure/**/*.clj', 'src/java/**/*.java'] do
   Rake::Task['package'].execute
 end
 
-task :jar => Pacer::McFly::JAR_PATH
+task :jar => Pacer::Parallel::JAR_PATH
 
 task :build => :jar
 task :install => :jar

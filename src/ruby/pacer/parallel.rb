@@ -1,7 +1,7 @@
 require "pacer/parallel/version"
+require File.join(Pacer::Parallel::PATH, Pacer::Parallel::JAR_PATH)
 require "pacer/clojure"
 require 'pacer'
-require File.join(Pacer::Parallel::PATH, Pacer::Parallel::JAR_PATH)
 require "pacer/parallel/channel_cap"
 require "pacer/parallel/channel_reader"
 require "pacer/parallel/channel_fan_in"
