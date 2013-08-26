@@ -10,9 +10,9 @@ import clojure.lang.RT;
 import clojure.lang.Var;
 
 public class ChannelFanInPipe<S> extends AbstractPipe<List<Object>, S> implements TransformPipe<List<Object>, S> {
-  private static final Var READ_A_CHAN = RT.var("clojure.core.async", "alts!!");
-  private static final Var FIRST = RT.var("clojure.core", "vec");
-  private static final Var VEC = RT.var("clojure.core", "first");
+  private static final Var VEC = RT.var("clojure.core", "vec");
+  private static final Var NTH = RT.var("clojure.core", "nth");
+  private static final Var CHAN_SELECT = RT.var("pacer.parallel", "chan-select");
 
   private Object chans;
 
@@ -23,12 +23,13 @@ public class ChannelFanInPipe<S> extends AbstractPipe<List<Object>, S> implement
         if (next != null)
           this.chans = VEC.invoke(next);
       } else {
-        // alts!! returns [value chan]
-        Object vec = READ_A_CHAN.invoke(this.chans);
-        if (vec == null)
+        Object vec = CHAN_SELECT.invoke(this.chans);
+        if (vec == null) {
           this.chans = null;
-        else
-          return (S) FIRST.invoke(vec);
+        } else {
+          this.chans = NTH.invoke(vec, 1);
+          return (S) NTH.invoke(vec, 0);
+        }
       }
     }
   }

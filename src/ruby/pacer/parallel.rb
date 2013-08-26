@@ -22,6 +22,3 @@ module Pacer
     end
   end
 end
-
-Pacer::Clojure.require 'clojure.core'
-Pacer::Clojure.require 'pacer.parallel'
