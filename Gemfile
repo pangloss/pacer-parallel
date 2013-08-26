@@ -1,4 +1,5 @@
-source 'https://rubygems.org'
+source "http://rubygems.org"
 
-# Specify your gem's dependencies in pacer-parallel.gemspec
 gemspec
+
+gem 'pacer', :path => '../pacer'
