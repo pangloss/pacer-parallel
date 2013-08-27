@@ -15,6 +15,7 @@ public class ChannelFanInPipe<S> extends AbstractPipe<List<Object>, S> implement
   private static final Var CHAN_SELECT = RT.var("pacer.parallel", "chan-select");
 
   private Object chans;
+  private List currentPath;
 
   protected S processNextStart() {
     while (true) {
@@ -28,13 +29,28 @@ public class ChannelFanInPipe<S> extends AbstractPipe<List<Object>, S> implement
           this.chans = null;
         } else {
           this.chans = NTH.invoke(vec, 1);
-          return (S) NTH.invoke(vec, 0);
+          if (this.pathEnabled) {
+            this.currentPath = (List) NTH.invoke(vec, 0);
+            System.out.println(this.currentPath);
+            return (S) this.currentPath.get(this.currentPath.size() - 1);
+          } else {
+            return (S) NTH.invoke(vec, 0);
+          }
         }
       }
     }
   }
 
+  public List getCurrentPath() {
+    if (this.pathEnabled) {
+      return this.currentPath;
+    } else {
+      throw new RuntimeException(Pipe.NO_PATH_MESSAGE);
+    }
+  }
+
   public void reset() {
+    this.currentPath = null;
     this.chans = null;
   }
 }

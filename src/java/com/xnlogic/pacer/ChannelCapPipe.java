@@ -12,6 +12,7 @@ import clojure.lang.Symbol;
 public class ChannelCapPipe<S> extends AbstractPipe<S, Object> implements TransformPipe<S, Object> {
   private static final Var REQUIRE = RT.var("clojure.core", "require"); 
   private static final Var PIPE_TO_CHAN = RT.var("pacer.parallel", "pipe->chan");
+  private static final Var PIPE_TO_PATH_CHAN = RT.var("pacer.parallel", "pipe->path-chan");
   private static boolean environmentReady = false;
 
   public static void setupEnvironment() {
@@ -22,7 +23,6 @@ public class ChannelCapPipe<S> extends AbstractPipe<S, Object> implements Transf
       ChannelCapPipe.environmentReady = true;
     }
   }
-
 
   private Object buffer;
   private boolean hasRun = false;
@@ -35,7 +35,11 @@ public class ChannelCapPipe<S> extends AbstractPipe<S, Object> implements Transf
   protected Object processNextStart() {
     if (!this.hasRun) {
       this.hasRun = true;
-      return PIPE_TO_CHAN.invoke(starts, buffer);
+      if (this.pathEnabled) {
+        return PIPE_TO_PATH_CHAN.invoke(starts, buffer);
+      } else {
+        return PIPE_TO_CHAN.invoke(starts, buffer);
+      }
     } else {
       throw FastNoSuchElementException.instance();
     }
