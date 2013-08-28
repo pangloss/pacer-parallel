@@ -1,5 +1,5 @@
 (defproject
-  pacer.parallel "0.1.0-SNAPSHOT"
+  pacer.parallel "0.2.0-SNAPSHOT"
   :description "Leveraging core.async in Pacer"
   :url         "http://xnlogic.com"
   :license     {:name "MIT"}

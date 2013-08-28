@@ -8,6 +8,8 @@ import com.tinkerpop.pipes.util.FastNoSuchElementException;
 import clojure.lang.RT;
 import clojure.lang.Var;
 import clojure.lang.Symbol;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ChannelCapPipe<S> extends AbstractPipe<S, Object> implements TransformPipe<S, Object> {
   private static final Var REQUIRE = RT.var("clojure.core", "require"); 
@@ -43,6 +45,13 @@ public class ChannelCapPipe<S> extends AbstractPipe<S, Object> implements Transf
     } else {
       throw FastNoSuchElementException.instance();
     }
+  }
+
+  // If path is enabled, the path will be pushed into the channel.
+  // Having a path available here as well causes the merge pipe to
+  // produce a messed up path.
+  public List getCurrentPath() {
+    return new ArrayList();
   }
 
   public void reset() {

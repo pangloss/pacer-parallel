@@ -47,6 +47,10 @@ public class ChannelReaderPipe<S> extends AbstractPipe<Object, S> implements Tra
     }
   }
 
+  protected List getPathToHere() {
+    return this.currentPath;
+  }
+
   public void reset() {
     this.currentPath = null;
     this.chan = null;
