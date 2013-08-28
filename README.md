@@ -2,6 +2,23 @@
 
 Parallelize [Pacer](https://github.com/pangloss/pacer) Routes.
 
+## Usage
+
+The following will create a route that will do the operation in the block in 2 parallel threads, while consuming the source data and
+enqueueing it for consumption by those threads in one additional thread:
+
+```ruby
+  g.v.parallel { |v| v.some_expensive_operation }
+```
+
+There are a few simple options, all optional. By default in_buffer is equal to the number of threads, and output is not buffered.
+
+```ruby
+  g.v.parallel(threads: 8, in_buffer: 4, out_buffer: 10) do |v|
+    v.all(&:out)
+  end
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -16,20 +33,10 @@ Or install it yourself as:
 
     $ gem install pacer-parallel
 
-## Usage
-
-```ruby
-  g.v.parallel(threads: 8, in_buffer: 4, out_buffer: 10) do |v|
-    v.all(&:out)
-  end
-```
-
 ## Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+...
 5. Create new Pull Request
 
 
@@ -45,21 +52,22 @@ Or install it yourself as:
 it configurable.
   * standard copy split pipe can push the channel to subchannels
   * each parallel route pulls from the channel.
-    * in a go block (waits will not block go thread pool)
-    * ChannelReaderPipe
-    * PathChannelReaderPipe
+      * in a go block (waits will not block go thread pool)
+      * ChannelReaderPipe
+      * PathChannelReaderPipe
   * parallel routes are unmodified
   * cap each route - eagerly consume input and push into a channel
-    * ChannelCapPipe again
+      * ChannelCapPipe again
   * ExhaustMergePipe + GatherPipe to create a route to an list of
     channels
   * use alts to read from any of the channels
-    * ChannelFanInPipe
+      * ChannelFanInPipe
 
 
 
 ## Pipe structure built to create parallel route:
 
+```
  CCP
  CSP (parallelism is 1 thread per pipe being split into)
    CRP -> Work ... -> CCP
@@ -67,4 +75,5 @@ it configurable.
    ...
  EMP
  GP
- CARP
+ CFIP
+```
