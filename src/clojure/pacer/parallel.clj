@@ -4,26 +4,24 @@
 
 (defn pipe->chan [^Pipe pipe buffer]
   (let [c (if buffer (chan buffer) (chan))]
-    (if (.hasNext pipe)
-      (future
+    (future
+      (try
         (loop [v (.next pipe)]
           (when v (>!! c v))
-          (if (.hasNext pipe)
-            (recur (.next pipe))
-            (close! c))))
-      (close! c))
+          (recur (.next pipe)))
+        (finally
+          (close! c))))
     c))
 
 (defn pipe->path-chan [^Pipe pipe buffer]
   (let [c (if buffer (chan buffer) (chan))]
-    (if (.hasNext pipe)
-      (future
+    (future
+      (try
         (loop [v (.next pipe) path (.getCurrentPath pipe)]
           (when v (>!! c path))
-          (if (.hasNext pipe)
-            (recur (.next pipe) (.getCurrentPath pipe))
-            (close! c))))
-      (close! c))
+          (recur (.next pipe) (.getCurrentPath pipe)))
+        (finally
+          (close! c))))
     c))
 
 (defn chan-select [chans]

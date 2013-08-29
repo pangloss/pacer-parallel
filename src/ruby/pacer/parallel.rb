@@ -15,7 +15,7 @@ module Pacer
           branched = (0...threads).reduce(channel_cap buffer: opts.fetch(:in_buffer, threads)) do |r, n|
             r.branch do |x|
               b = block.call x.channel_reader(based_on: self)
-              b.channel_cap buffer: opts[:out_buffer]
+              b.channel_cap buffer: opts.fetch(:out_buffer, threads)
             end
           end
           branched.merge_exhaustive.gather.channel_fan_in(based_on: block.call(self))
